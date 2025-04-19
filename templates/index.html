@@ -1,19 +1,111 @@
 <!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>QRコード生成</title>
-</head>
-<body>
-  <h1>QRコード生成</h1>
-  <form method="post">
-    <input type="text" name="data" placeholder="文字列を入力" required>
-    <button type="submit">生成</button>
-  </form>
 
-  {% if qr_url %}
-    <h2>生成されたQRコード：</h2>
-    <img src="{{ qr_url }}" alt="QR Code">
-  {% endif %}
+<head>
+    <meta charset="UTF-8">
+    <title>QRコード生成</title>
+    <style>
+        .qr-history {
+            margin-top: 30px;
+            padding: 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+            border-top: 1px solid #ccc;
+        }
+
+        .qr-history img {
+            display: inline-block;
+            margin-right: 10px;
+            height: 100px;
+            width: 100px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal img {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>QRコード生成</h1>
+    <form method="post">
+        <input type="text" name="data" placeholder="文字列を入力" required>
+        <button type="submit">生成</button>
+    </form>
+
+    {% if history %}
+    <div class="qr-history">
+        {% for item in history %}
+        <img src="{{ item.url }}" alt="QR" data-text="{{ item.text }}" data-url="{{ item.url }}"
+            onclick="openModal(this)">
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImg" src="" alt="QR Preview">
+            <p id="modalText"></p>
+        </div>
+    </div>
+
+    <script>
+        function openModal(el) {
+            document.getElementById('modalImg').src = el.dataset.url;
+            document.getElementById('modalText').textContent = el.dataset.text;
+            document.getElementById('qrModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            const modal = document.getElementById('qrModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('beforeunload', function (e) {
+            navigator.sendBeacon('/clear');
+        });
+    </script>
 </body>
+
 </html>
