@@ -2,4 +2,4 @@
 QRコードを生成するAPIを用いたFlaskアプリ
 
 ## デプロイの設定
-https://note.com/10mohi6/n/n0e5c3ac53bf6
+https://medium.com/@nohanabil/how-to-deploy-flask-app-using-vercel-885ce034624
