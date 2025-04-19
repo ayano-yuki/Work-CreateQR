@@ -3,14 +3,67 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QRコード生成</title>
     <style>
-        .qr-history {
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
             margin-top: 30px;
+            font-size: 24px;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .qr-history {
+            margin: 30px auto;
             padding: 10px;
             overflow-x: auto;
             white-space: nowrap;
             border-top: 1px solid #ccc;
+            max-width: 100%;
         }
 
         .qr-history img {
@@ -19,8 +72,13 @@
             height: 100px;
             width: 100px;
             border: 1px solid #ccc;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .qr-history img:hover {
+            transform: scale(1.05);
         }
 
         .modal {
@@ -37,12 +95,13 @@
 
         .modal-content {
             background-color: #fff;
-            margin: 10% auto;
+            margin: 15% auto;
             padding: 20px;
-            border: 1px solid #888;
-            width: 300px;
-            text-align: center;
             border-radius: 10px;
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .close {
@@ -56,6 +115,25 @@
         .modal img {
             width: 200px;
             height: 200px;
+        }
+
+        .modal p {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .clear-btn-wrapper {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .clear-btn-wrapper button {
+            background-color: #f44336;
+        }
+
+        .clear-btn-wrapper button:hover {
+            background-color: #e53935;
         }
     </style>
 </head>
@@ -75,7 +153,7 @@
         {% endfor %}
     </div>
 
-    <div style="margin-top: 20px;">
+    <div class="clear-btn-wrapper">
         <button onclick="clearHistory()">履歴をクリア</button>
     </div>
     {% endif %}
